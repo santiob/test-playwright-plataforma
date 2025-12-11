@@ -12,13 +12,13 @@ module.exports = defineConfig({
     timeout: 10000
   },
   
-  // Reintentos en caso de fallo
-  fullyParallel: false,
+  // ⭐ CAMBIO: Habilitar ejecución paralela
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   
-  // Workers: solo 1 para evitar problemas de concurrencia
-  workers: 1,
+  // ⭐ CAMBIO: 2 workers para ejecutar tests en paralelo
+  workers: process.env.CI ? 2 : 2,
   
   // Reporter configuration
   reporter: [
@@ -28,10 +28,8 @@ module.exports = defineConfig({
     ['junit', { outputFile: 'test-results/junit.xml' }]
   ],
   
+  // Configuración común para todos los proyectos
   use: {
-    // URL base - Ambiente UAT La Rionegrina
-    baseURL: process.env.BASE_URL || 'https://uat-rn-lotline.tecnoaccion.com.ar',
-    
     // Captura de evidencias
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -48,10 +46,27 @@ module.exports = defineConfig({
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
   },
   
+  // ⭐ CAMBIO: Definir 2 proyectos para 2 plataformas diferentes
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'plataforma-rionegrina',
+      use: { 
+        ...devices['Desktop Chrome'],
+        // URL para La Rionegrina (Río Negro)
+        baseURL: process.env.BASE_URL_RIONEGRINA || 'https://uat-rn-lotline.tecnoaccion.com.ar',
+      },
+      // Credenciales específicas de esta plataforma
+      testMatch: /.*rionegrina.*\.spec\.js/,
+    },
+    {
+      name: 'plataforma-secundaria',
+      use: { 
+        ...devices['Desktop Chrome'],
+        // URL para segunda plataforma
+        baseURL: process.env.BASE_URL_SECUNDARIA || 'https://url-segunda-plataforma.com',
+      },
+      // Tests específicos de esta plataforma (opcional)
+      testMatch: /.*secundaria.*\.spec\.js/,
     },
   ],
 });
