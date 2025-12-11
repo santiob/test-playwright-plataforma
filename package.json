@@ -1,0 +1,21 @@
+{
+  "name": "test-playwright-plataforma",
+  "version": "1.0.0",
+  "description": "Tests automatizados con Playwright para La Rionegrina Online - UAT",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:login": "playwright test tests/login.spec.js",
+    "test:cupones": "playwright test tests/cupones.spec.js"
+  },
+  "keywords": ["playwright", "testing", "e2e", "automation", "rionegrina"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "dotenv": "^16.3.1"
+  }
+}
