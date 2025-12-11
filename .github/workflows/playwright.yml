@@ -2,10 +2,14 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ generación-cupon-ok, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ generación-cupon-ok ]
+  schedule:
+    # Ejecutar cada 6 horas
+    - cron: '0 */6 * * *'
   workflow_dispatch:
+    # Permitir ejecución manual
 
 jobs:
   test:
@@ -55,4 +59,7 @@ jobs:
       if: always()
       with:
         files: |
-          test-results/junit.xml
+          test-results/junit.xmlname: Playwright Tests
+
+
+      
